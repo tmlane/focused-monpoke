@@ -14,8 +14,7 @@ Bundler
 Use bundler to install the gems
 ```bash
 #clone this repository
-git@github.com:tmlane/<enter in git>
-
+git@github.com:tmlane/focused-monpoke.git
 #navigate into repo
 bundle install 
 ```
