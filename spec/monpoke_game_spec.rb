@@ -45,7 +45,7 @@ describe MonpokeGame do
          "CREATE Rocket Doggy 5 6"]
       }
       it "it raises error" do
-        expect { subject.play(input) }.to raise_error(SystemExit)
+        expect { subject.play(input) }.to raise_error(SystemExit, "Cannot create Monpoke during Battle Stage")
       end
     end
     context "when team_1 tries to choose a monpoke before team_2 is created" do
@@ -55,7 +55,7 @@ describe MonpokeGame do
          "ICHOOSEYOU Meekachu"]
       }
       it "it raises error" do
-        expect { subject.play(input) }.to raise_error(SystemExit)
+        expect { subject.play(input) }.to raise_error(SystemExit, "Battle cannot begin until there are 2 teams")
       end
     end
     context "when team_1 tries to choose a monpoke before team_2 is created" do
@@ -65,14 +65,14 @@ describe MonpokeGame do
          "ICHOOSEYOU Meekachu"]
       }
       it "it raises error" do
-        expect { subject.play(input) }.to raise_error(SystemExit)
+        expect { subject.play(input) }.to raise_error(SystemExit, "Invalid Action: First action must create first team and monpoke")
       end
     end
     context "when a team's monpoke is defeated and it doesn't do ICHOOSE you next turn" do
       let!(:input) {
         ["CREATE Rocket Meekachu 3 1",
          "CREATE Rocket Rastly 5 6",
-         "CREATE Green Smorelax 2 1",
+         "CREATE Green Smorelax 2 5",
          "ICHOOSEYOU Meekachu",
          "ICHOOSEYOU Smorelax",
          "ATTACK",
@@ -82,7 +82,7 @@ describe MonpokeGame do
          "ATTACK"]
       }
       it "it raises error" do
-        expect { subject.play(input) }.to raise_error(SystemExit)
+        expect { subject.play(input) }.to raise_error(SystemExit, "Not ready for battle")
       end
     end
   end

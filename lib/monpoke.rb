@@ -3,7 +3,7 @@ class Monpoke
 
   def initialize(id, hp, ap)
     if ((hp.to_i < 1) || (ap.to_i < 1))
-      exit(1)
+      abort("Monpoke must start with at least 1 hp & ap")
     end
 
     @id = id

@@ -9,11 +9,11 @@ module MonpokeGame
     if action == "CREATE"
       game = Game.new(*first_command)
     else
-      exit(1)
+      abort("Invalid Action: First action must create first team and monpoke")
     end
 
-    unless (game.game_over)
-      input.each do |command|
+    input.each do |command|
+      unless (game.game_over)
         game.play_log << game.play_turn(command.split)
       end
     end
