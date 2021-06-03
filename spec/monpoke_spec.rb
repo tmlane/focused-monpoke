@@ -11,7 +11,7 @@ describe Monpoke do
     context "when ap or hp are less than 1" do
       let(:subject) { Monpoke.new("Katerpie", 0, 2) }
       it "raises an error" do
-        expect { subject }.to raise_error
+        expect { subject }.to raise_error(SystemExit, "Monpoke must start with at least 1 hp & ap")
       end
     end
   end

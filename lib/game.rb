@@ -34,18 +34,18 @@ class Game
       output = attack()
       pass_turn
     elsif action == "ICHOOSEYOU"
-      return exit(1) if !self.choose_stage?
+      return abort("Battle cannot begin until there are 2 teams") if !self.choose_stage?
       output = @current_team.choose(command.pop)
       pass_turn
     else
-      exit(1)
+      abort("Invalid Action")
     end
     return output
   end
 
   def create(command)
     if !self.create_stage?
-      return exit(1)
+      return abort("Cannot create Monpoke during Battle Stage")
     end
 
     team_id = command.shift
@@ -64,7 +64,7 @@ class Game
 
   def attack
     if !self.ready_for_battle?
-      return exit(1)
+      return abort("Not ready for battle")
     end
 
     attacker = @current_team.current_monpoke

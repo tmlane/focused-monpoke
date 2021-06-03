@@ -145,24 +145,20 @@ describe Game do
 
     context "when both teams are not ready for battle" do
       it "raises exit error 1" do
-        expect { game.attack() }.to raise_error(SystemExit)
+        expect { game.attack() }.to raise_error(SystemExit, "Not ready for battle")
       end
     end
     context "when both teams are ready for battle" do
-      let(:attacker) { Monpoke.new("Metapahd", "5", "3") }
-      let(:defender) { Monpoke.new("Ivysore", "6", "4") }
-      let(:defender_2) { Monpoke.new("Charzar", "7", "5") }
-      let(:team_2) { Team.new("Orange") }
       before do
-        team_2.monpokes = [defender, defender_2]
-        game.current_team = game.team_1
-        game.team_2 = team_2
-        game.team_1.current_monpoke = attacker
-        game.team_2.current_monpoke = defender
+        game.play_turn("CREATE Rocket Metapahd 5 3".split)
+        game.play_turn("CREATE Orange Ivysore 6 4".split)
+        game.play_turn("CREATE Orange Charzar 7 5".split)
+        game.play_turn("ICHOOSEYOU Metapahd".split)
+        game.play_turn("ICHOOSEYOU Ivysore".split)
       end
       context "non-critical attack " do
         it "changes HP of defender by AP of attacker" do
-          expect { subject }.to change { defender.hp }.from(6).to(3)
+          expect { subject }.to change { game.team_2.current_monpoke.hp }.from(6).to(3)
         end
         it "returns just the attack output" do
           expect(subject).to eq("Metapahd attacked Ivysore for 3 damage!")
@@ -170,17 +166,17 @@ describe Game do
       end
       context "critical attack" do
         before do
-          attacker.ap = 10
+          game.team_1.current_monpoke.ap = 10
         end
         it "returns the attack and defeated output" do
           expect(subject).to eq("Metapahd attacked Ivysore for 10 damage!\nIvysore has been defeated!")
         end
         it "adds 1 to the graveyard" do
-          expect { subject }.to change { team_2.graveyard }.from(0).to(1)
+          expect { subject }.to change { game.team_2.graveyard }.from(0).to(1)
         end
         context "final kill" do
           before do
-            allow(team_2).to receive(:defeated?).and_return(true)
+            allow(game.team_2).to receive(:defeated?).and_return(true)
           end
           it "returns the attack, defeated, and game winner output" do
             expect(subject).to eq("Metapahd attacked Ivysore for 10 damage!\nIvysore has been defeated!\nRocket is the winner!")

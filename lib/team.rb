@@ -15,7 +15,7 @@ class Team
   def choose(monpoke_id)
     monpoke = @monpokes.find { |m| m.id == monpoke_id }
     if monpoke.nil?
-      exit(1)
+      abort("Monpoke not found")
     end
     @current_monpoke = monpoke
 
